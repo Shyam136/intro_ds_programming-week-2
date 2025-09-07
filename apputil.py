@@ -3,23 +3,32 @@ import numpy as np
 
 def ways(n: int) -> int:
     """
-    Return the number of unordered factor pairs of n.
-    Examples:
-      12 -> (1,12),(2,6),(3,4) => 3
-      20 -> (1,20),(2,10),(4,5) => 3
-      1  -> (1,1) => 1
+    Return the number of proper divisors of n (divisors < n, including 1).
+
     Conventions:
-      ways(0) = 1
-      negatives use |n|
+      - ways(0) = 1
+      - ways(1) = 1
+      - negatives use |n|
+
+    Examples:
+      12 -> {1,2,3,4,6} => 5
+      20 -> {1,2,4,5,10} => 5
+      1  -> {1} => 1
     """
     if n == 0:
         return 1
     n = abs(n)
+    if n == 1:
+        return 1
+
+    count = 1  # count '1'
     r = int(n ** 0.5)
-    count = 0
-    for d in range(1, r + 1):
+    for d in range(2, r + 1):
         if n % d == 0:
-            count += 1  # each d≤sqrt(n) represents one unordered pair (d, n//d)
+            count += 1           # d is a proper divisor
+            other = n // d
+            if other != d and other != n:
+                count += 1       # paired proper divisor (not n, not duplicate)
     return count
 
 
